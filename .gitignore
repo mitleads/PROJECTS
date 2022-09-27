@@ -71,6 +71,7 @@ nosetests.xml
 # Images
 *.pdf
 *.png
+*.csv
 
 ide/Wing/SUAVE.wpr
 /doc/html

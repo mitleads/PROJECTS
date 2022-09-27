@@ -67,3 +67,14 @@ nosetests.xml
 *.cfg
 *.su2
 *.key
+
+# Images
+*.pdf
+*.png
+
+ide/Wing/SUAVE.wpr
+/doc/html
+/doc/latex
+
+!/doc/suave_logo.png
+/trunk/SUAVE/version.py

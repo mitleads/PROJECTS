@@ -16,12 +16,13 @@ import time
 import numpy as np
 import pylab as plt
 
-import Stopped_Rotor_V2.Stopped_Rotor_V2_Vehicle
-import Stopped_Rotor_V2.Stopped_Rotor_V2_Analyses 
-import Stopped_Rotor_V2.Stopped_Rotor_V2_Missions
-import Stopped_Rotor_V2.Stopped_Rotor_V2_Plots 
+import sys 
+sys.path.append('../../Aircraft_Models/Stopped_Rotor_V2')  
 
-
+import Stopped_Rotor_V2_Vehicle
+import Stopped_Rotor_V2_Analyses 
+import Stopped_Rotor_V2_Missions
+import Stopped_Rotor_V2_Plots  
 
 try:
     import vsp 
@@ -56,11 +57,11 @@ def main():
     
     
     # SET UP VEHICLE 
-    vehicle           = Stopped_Rotor_V2.Stopped_Rotor_V2_Vehicle.vehicle_setup() 
+    vehicle           = Stopped_Rotor_V2_Vehicle.vehicle_setup() 
     #write(vehicle,"Stopped_Rotor_V2")  
     
     # SET UP CONFIGURATIONS 
-    configs           = Stopped_Rotor_V2.Stopped_Rotor_V2_Vehicle.configs_setup(vehicle) 
+    configs           = Stopped_Rotor_V2_Vehicle.configs_setup(vehicle) 
     
     # devide computational domain to increase noise prediction
     if run_noise_model:
@@ -83,13 +84,13 @@ def main():
                 min_y = Y_LIM[j]
                 max_y = Y_LIM[j+1]
             
-                configs_analyses  = Stopped_Rotor_V2.Stopped_Rotor_V2_Analyses.analyses_setup(configs,N_gm_x,N_gm_y,min_y,max_y,min_x,max_x,
+                configs_analyses  = Stopped_Rotor_V2_Analyses.analyses_setup(configs,N_gm_x,N_gm_y,min_y,max_y,min_x,max_x,
                                                    aircraft_range,run_noise_model) 
                 
                 # SET UP MISSION PROFILE 
-                base_mission      = Stopped_Rotor_V2.Stopped_Rotor_V2_Missions.approach_departure_mission_setup(configs_analyses,vehicle,simulated_days,flights_per_day,
+                base_mission      = Stopped_Rotor_V2_Missions.approach_departure_mission_setup(configs_analyses,vehicle,simulated_days,flights_per_day,
                                                         aircraft_range,reserve_segment,control_points,recharge_battery,true_course_angle )
-                missions_analyses = Stopped_Rotor_V2.Stopped_Rotor_V2_Missions.missions_setup(base_mission) 
+                missions_analyses = Stopped_Rotor_V2_Missions.missions_setup(base_mission) 
                 
                 # DEFINE ANALYSES 
                 analyses          = SUAVE.Analyses.Analysis.Container()

@@ -41,6 +41,7 @@ nosetests.xml
 .pydevproject
 *.wpu
 *.wpr
+UQ_Aircraft_Design/uncertainpy
 
 /workspace
 .idea

@@ -44,7 +44,7 @@ def main():
     reserve_segment   = False           # reserve segment flag, if true, ground distance not included  
     recharge_battery  = False           # flag to simulate battery recharge  
     plot_mission      = False           # plot mission flag  
-    control_points    = 12              # number of control points per segment 
+    control_points    = 10              # number of control points per segment 
     true_course_angles= np.array([0,45,90,135,180])  # in degrees 
     run_noise_model   = True            # flag to run noise analysis    
     N_gm_x            = 10              # number of microphones in longitudinal direction on ground 

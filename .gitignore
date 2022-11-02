@@ -57,8 +57,13 @@ nosetests.xml
 # Mac
 .DS_Store
 
-
+*.pkl
 *.dat
+*.mp4
+*.m
+*.h5 
+*.fig
+*.IGS 
 
 # Geometry
 *.geo

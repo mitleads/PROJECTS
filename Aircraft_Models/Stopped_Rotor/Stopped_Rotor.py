@@ -816,13 +816,15 @@ def vehicle_setup():
     ospath    = os.path.abspath(__file__)
     separator = os.path.sep
     rel_path  = os.path.dirname(ospath) + separator 
-    propeller.airfoil_geometry       =  [rel_path + '../Airfoils/NACA_4412.txt']
-    propeller.airfoil_polars         = [[rel_path + '../Airfoils/Polars/NACA_4412_polar_Re_50000.txt' ,
+    airfoil                          = SUAVE.Components.Airfoils.Airfoil()   
+    airfoil.coordinate_file          = rel_path + '../Airfoils/NACA_4412.txt'
+    airfoil.polar_files              = [rel_path + '../Airfoils/Polars/NACA_4412_polar_Re_50000.txt' ,
                                          rel_path + '../Airfoils/Polars/NACA_4412_polar_Re_100000.txt' ,
                                          rel_path + '../Airfoils/Polars/NACA_4412_polar_Re_200000.txt' ,
                                          rel_path + '../Airfoils/Polars/NACA_4412_polar_Re_500000.txt' ,
-                                         rel_path + '../Airfoils/Polars/NACA_4412_polar_Re_1000000.txt' ]] 
-    propeller.airfoil_polar_stations = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+                                         rel_path + '../Airfoils/Polars/NACA_4412_polar_Re_1000000.txt' ]
+    propeller.append_airfoil(airfoil)  
+    propeller.airfoil_polar_stations      = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0] 
     propeller                        = propeller_design(propeller)
     
     propeller_origins                = [[   7.126, 1.3  ,  1.250 ] ,[  7.126, -1.3  ,  1.250 ]]
@@ -848,14 +850,15 @@ def vehicle_setup():
     rotor.design_altitude            = 20 * Units.feet                     
     rotor.design_thrust              = Hover_Load/(net.number_of_lift_rotor_engines) # contingency for one-engine-inoperative condition and then turning off off-diagonal rotor
     rotor.variable_pitch             = True 
-    rotor.airfoil_geometry           =  [rel_path + '../Airfoils/NACA_4412.txt']
-    rotor.airfoil_polars             = [[rel_path + '../Airfoils/Polars/NACA_4412_polar_Re_50000.txt' ,
+    airfoil                          = SUAVE.Components.Airfoils.Airfoil()   
+    airfoil.coordinate_file          = rel_path + '../Airfoils/NACA_4412.txt'
+    airfoil.polar_files              = [rel_path + '../Airfoils/Polars/NACA_4412_polar_Re_50000.txt' ,
                                          rel_path + '../Airfoils/Polars/NACA_4412_polar_Re_100000.txt' ,
                                          rel_path + '../Airfoils/Polars/NACA_4412_polar_Re_200000.txt' ,
                                          rel_path + '../Airfoils/Polars/NACA_4412_polar_Re_500000.txt' ,
-                                         rel_path + '../Airfoils/Polars/NACA_4412_polar_Re_1000000.txt' ]]
-
-    rotor.airfoil_polar_stations     = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+                                         rel_path + '../Airfoils/Polars/NACA_4412_polar_Re_1000000.txt' ]
+    rotor.append_airfoil(airfoil)    
+    rotor.airfoil_polar_stations          = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
     rotor                            = propeller_design(rotor)
 
 
@@ -1213,7 +1216,7 @@ def full_mission_setup(analyses,vehicle,simulated_days,flights_per_day,aircraft_
             segment                                          = Segments.Cruise.Constant_Speed_Constant_Altitude(base_segment)
             segment.tag                                      = "Cruise" + "_F_" + str(flight_no) + "_D" + str (day) 
             segment.analyses.extend( analyses.base )                 
-            segment.altitude                                 = 2500.0 * Units.ft
+            segment.altitude                                 = 2500.0 * Units.ft            
             segment.air_speed                                = 175.   * Units['mph']
             cruise_distance                                  = aircraft_range - 32.26 * Units.nmi    
             segment.distance                                 = cruise_distance  

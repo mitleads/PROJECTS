@@ -25,18 +25,14 @@ def main():
     rotor.tag                        = 'rotor'
     rotor.orientation_euler_angles   = [0, 90*Units.degrees,0]
     rotor.tip_radius                 = 2.7/2
-    rotor.hub_radius                 = 0.2 * rotor.tip_radius  
+    rotor.hub_radius                 = 0.15 * rotor.tip_radius  
     rotor.number_of_blades           = 3    
     rotor.design_tip_mach            = 0.5 
     rotor.angular_velocity           = rotor.design_tip_mach* 343 /rotor.tip_radius 
-    rotor.design_thrust              = 23544/(8-1)  # vased on Stopped-Rotor V2, vehicle weight/(number of rotors - 1 )
+    rotor.design_thrust              = 23544/(8)  # based on Stopped-Rotor V2, vehicle weight/(number of rotors - 1 )
     rotor.freestream_velocity        = np.sqrt(rotor.design_thrust/(2*1.2*np.pi*(rotor.tip_radius**2))) # Ideal power  
     rotor.design_Cl                  = 0.7
-    rotor.design_altitude            = 20 * Units.feet 
-    rotor.design_microphone_angle    = 175 * Units.degrees
-    rotor.design_velocity_vector     = np.array([52,0,-0.9]) 
-    rotor.design_disc_plane          = 95 * Units.degrees
-    rotor.variable_pitch             = True   
+    rotor.design_altitude            = 20 * Units.feet   
     airfoil                          = SUAVE.Components.Airfoils.Airfoil()    
     airfoil.coordinate_file          =  '../../Aircraft_Models/Airfoils/NACA_4412.txt'
     airfoil.polar_files              = ['../../Aircraft_Models/Airfoils/Polars/NACA_4412_polar_Re_50000.txt',
@@ -55,13 +51,12 @@ def main():
     
     
     '''lift rotor design using new method '''
-    alpha_weights                      = np.array([0.5])  #  np.linspace(0.0,1.0,200)    
-    plot_rotor_geomery_and_performance = True
-    use_pyoptsparse                    = False
-    save_figures                       = False   
+    alpha_weights                      = np.linspace(0.0,0.25,101)  
+    plot_rotor_geomery_and_performance = True  
+    use_pyoptsparse                    = False 
+    save_figures                       = False  
     design_lift_rotors(rotor,alpha_weights,use_pyoptsparse,plot_rotor_geomery_and_performance,save_figures)
-    
-    
+     
     
     #'''plot lift rotor pareto fronteir '''
     #alpha_weights                      = np.array([1.0,0.75,0.5,0.25,0.0]) #  np.linspace(0.0,0.2,21)    

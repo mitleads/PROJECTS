@@ -634,7 +634,7 @@ def plot_3d_rotor_geometry(rotor,fig_name,save_figure, elevation_angle = 45,  ax
 def get_blade_coordinates(rotor,n_points,dim,i,aircraftRefFrame=True): 
     # unpack
     num_B        = rotor.number_of_blades
-    airfoils     = rotor.airfoils 
+    airfoils     = rotor.Airfoils 
     beta         = rotor.twist_distribution + rotor.inputs.pitch_command
     a_o          = rotor.start_angle
     b            = rotor.chord_distribution
@@ -758,8 +758,8 @@ def get_blade_coordinates(rotor,n_points,dim,i,aircraftRefFrame=True):
 def plot_geoemtry_and_performance(rotor,rotor_name,save_figures):
     PP                = define_plot_parameters() 
     
-    n_root_sections   = 8
-    rotor_modified    = add_rotor_stem(rotor,number_of_root_sections = n_root_sections)
+    n_root_sections   = 1 # 8
+    rotor_modified    = rotor # add_rotor_stem(rotor,number_of_root_sections = n_root_sections)
     c                 = rotor_modified.chord_distribution
     beta              = rotor_modified.twist_distribution
     MCA               = rotor_modified.mid_chord_alignment
@@ -1247,7 +1247,7 @@ def add_rotor_stem(rotor,number_of_root_sections= 5):
     
     # define airfoil sections   
     a1            = "Circle_Section.txt"
-    a2            = rotor.airfoils[list(rotor.airfoils.keys())[0]].coordinate_file    # first airfoil on rotor 
+    a2            = rotor.Airfoils[list(rotor.Airfoils.keys())[0]].coordinate_file    # first airfoil on rotor 
     new_files     = generate_interpolated_airfoils(a1, a2, number_of_root_sections,save_filename="Root_Airfoil")  
     
     for i in range(number_of_root_sections-1):
@@ -1257,11 +1257,11 @@ def add_rotor_stem(rotor,number_of_root_sections= 5):
         airfoil.tag                 = 'Root_Section_' + str(i)
         airfoil.geometry            = import_airfoil_geometry(airfoil.coordinate_file )
         # append geometry
-        rotor.airfoils.append(airfoil) 
+        rotor.Airfoils.append(airfoil) 
     
     # modify rotor 
     x      = np.linspace(0,4,number_of_root_sections)  
-    func_1 = (np.tanh(x-2) + 2)/3 
+    func_1 = (np.tanh(x-2) + 2)/3
     func_2 = (np.tanh(x-2) + 1)/3 
     
     root_radius = np.linspace(0.1,rotor.radius_distribution[0],number_of_root_sections)[:-1]
@@ -1270,7 +1270,7 @@ def add_rotor_stem(rotor,number_of_root_sections= 5):
     root_aloc   = list(np.arange(1,number_of_root_sections)) 
  
     # update rotor geoetry  
-    rotor.airfoil_polar_stations          = root_aloc + rotor.airfoil_polar_stations
+    rotor.airfoil_polar_stations     = root_aloc + rotor.airfoil_polar_stations
     rotor.chord_distribution         = np.hstack(( root_chord, rotor.chord_distribution   )) 
     rotor.twist_distribution         = np.hstack((root_twist , rotor.twist_distribution  ))   
     rotor.radius_distribution        = np.hstack((root_radius , rotor.radius_distribution       ))  
@@ -1278,8 +1278,8 @@ def add_rotor_stem(rotor,number_of_root_sections= 5):
     
     t_max_root  = np.zeros((number_of_root_sections - 1))    
     t_c_root    = np.zeros((number_of_root_sections - 1))    
-    if len(rotor.airfoils.keys())>0:
-        for j,airfoil in enumerate(rotor.airfoils): 
+    if len(rotor.Airfoils.keys())>0:
+        for j,airfoil in enumerate(rotor.Airfoils): 
             a_geo              = airfoil.geometry
             locs               = np.where(np.array(root_aloc) == j )
             t_max_root[locs]   = a_geo.thickness_to_chord*rotor.chord_distribution[locs]

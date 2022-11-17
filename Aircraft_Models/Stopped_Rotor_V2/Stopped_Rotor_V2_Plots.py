@@ -18,10 +18,10 @@ import pylab as plt
 # ----------------------------------------------------------------------
 #   Plot Results
 # ----------------------------------------------------------------------
-def plot_results(results,run_noise_model,line_style='bo-'):
+def plot_results(results,run_noise_model,save_figure_flag,line_style='bo-'):
     
     # Universal Plot Settings 
-    plt.rcParams['axes.linewidth'] = 2.
+    plt.rcParams['axes.linewidth'] = 1.
     plt.rcParams["font.family"] = "Times New Roman"
     parameters = {'axes.labelsize': 24,
                   'xtick.labelsize': 20,
@@ -53,30 +53,29 @@ def plot_results(results,run_noise_model,line_style='bo-'):
     
     
     # Plot Flight Conditions 
-    plot_flight_conditions(results, line_style) 
-    
+    plot_flight_conditions(results, line_style,save_figure = save_figure_flag)  
     
     # Plot Aerodynamic Coefficients
-    plot_aerodynamic_coefficients(results, line_style)  
+    plot_aerodynamic_coefficients(results, line_style,save_figure = save_figure_flag)  
     
     # Plot Aircraft Flight Speed
-    plot_aircraft_velocities(results, line_style) 
+    plot_aircraft_velocities(results, line_style,save_figure = save_figure_flag) 
 
     # Plot Aircraft Electronics
-    plot_battery_pack_conditions(results, line_style)    
+    plot_battery_pack_conditions(results, line_style,save_figure = save_figure_flag)    
     
     # Plot Electric Motor and Propeller Efficiencies  of Lift Cruise Network
-    plot_lift_cruise_network(results, line_style)   
+    plot_lift_cruise_network(results, line_style,save_figure = save_figure_flag)   
 
     # Plot Battery Degradation  
-    plot_battery_degradation(results, line_style)    
+    plot_battery_degradation(results, line_style,save_figure = save_figure_flag)    
 
     if run_noise_model:     
         # Plot noise level
-        plot_ground_noise_levels(results)
+        plot_ground_noise_levels(results,save_figure = save_figure_flag)
         
         # Plot noise contour
-        plot_flight_profile_noise_contours(results) 
+        plot_flight_profile_noise_contours(results,save_figure = save_figure_flag) 
     return     
  
 

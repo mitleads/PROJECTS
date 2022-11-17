@@ -55,6 +55,8 @@ def plot_results(results,run_noise_model,line_style='bo-'):
     # Plot Flight Conditions 
     plot_flight_conditions(results, line_style) 
     
+     # Plot Flight Trajectory
+    plot_flight_trajectory(results)
     
     # Plot Aerodynamic Coefficients
     plot_aerodynamic_coefficients(results, line_style)  

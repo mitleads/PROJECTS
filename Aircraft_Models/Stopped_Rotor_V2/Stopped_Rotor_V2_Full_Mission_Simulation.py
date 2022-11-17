@@ -41,19 +41,26 @@ def main():
     # SET UP SIMULATION PARAMETERS     
     simulated_days    = 1               # number of days simulated 
     flights_per_day   = 1               # number of flights per day 
-    aircraft_range    = 55 *Units.nmi   # total ground distance 
+    aircraft_range    = 30 *Units.nmi   # total ground distance 
     reserve_segment   = False           # reserve segment flag, if true, ground distance not included  
     recharge_battery  = False           # flag to simulate battery recharge  
     plot_mission      = True            # plot mission flag  
-    control_points    = 20              # number of control points per segment 
-    true_course_angle = 0 * Units.degrees
+    control_points    = 10              # number of control points per segment 
+    true_course       = 80 * Units.degrees
     run_noise_model   = False           # flag to run noise analysis    
-    N_gm_x            = 10              # number of microphones in longitudinal direction on ground 
-    N_gm_y            = 5               # number of microphones in lateral direction on ground  
-    min_y             = 1E-3            # minimum y (lateral) coordinate of acoustic computational domain 
-    max_y             = 0.5*Units.nmi   # maxiumum y (lateral) coordinate of acoustic computational domain
-    min_x             = 0.*Units.nmi    # minimum x (longitudinal) coordinate of acoustic computational domain 
-    max_x             = aircraft_range  # maxiumum x (longitudinal) coordinate of acoustic computational domain   
+    N_lat             = 20              # total number of microphones in longitudinal direction on ground 
+    N_long            = 20              # total number of microphones in lateral direction on ground  
+    n_lat             = 2               # number of microphones in stencil longitudinal direction on ground 
+    n_long            = 2               # number of microphones in stencil lateral direction on ground  
+    min_y             = -1E5            # minimum y (lateral) coordinate of acoustic computational domain 
+    max_y             = 1E5             # maxiumum y (lateral) coordinate of acoustic computational domain
+    min_x             = 0               # minimum x (longitudinal) coordinate of acoustic computational domain 
+    max_x             = 2E5             # maxiumum x (longitudinal) coordinate of acoustic computational domain 
+    mic_xyz           = None 
+    start_x           = 500
+    start_y           = 500
+    starting_altitude = 0
+    ending_altitude   = 100
      
     # SET UP VEHICLE 
     vehicle           = Stopped_Rotor_V2_Vehicle.vehicle_setup() 
@@ -61,55 +68,37 @@ def main():
     
     # SET UP CONFIGURATIONS 
     configs           = Stopped_Rotor_V2_Vehicle.configs_setup(vehicle) 
+     
+    configs_analyses  = Stopped_Rotor_V2_Analyses.analyses_setup(configs,N_lat,N_long,n_lat,n_long,mic_xyz,min_y,max_y,min_x,max_x,
+                                                                 start_x,start_y,aircraft_range,run_noise_model)
     
-    # devide computational domain to increase noise prediction
-    if run_noise_model:
-        n = 3  
-    else:
-        n = 2
-    Y_LIM = np.linspace(min_y,max_y,n)     
-    X_LIM = np.linspace(min_x,max_x,n)                  
-    Q_idx             = 1
-    for i in range(len(X_LIM)-1):
-        for j in range(len(Y_LIM)-1): 
-            print('Running Quardant:' + str(Q_idx)) 
-            min_x = X_LIM[i]
-            max_x = X_LIM[i+1]
-            min_y = Y_LIM[j]
-            max_y = Y_LIM[j+1]
-        
-            configs_analyses  = Stopped_Rotor_V2_Analyses.analyses_setup(configs,N_gm_x,N_gm_y,min_y,max_y,min_x,max_x,
-                                               aircraft_range,run_noise_model) 
-            
-            # SET UP MISSION PROFILE 
-            base_mission      = Stopped_Rotor_V2_Missions.full_mission_setup(configs_analyses,vehicle,simulated_days,flights_per_day,
-                                                    aircraft_range,reserve_segment,control_points,recharge_battery,true_course_angle  )
-            missions_analyses = Stopped_Rotor_V2_Missions.missions_setup(base_mission) 
-            
-            # DEFINE ANALYSES 
-            analyses          = SUAVE.Analyses.Analysis.Container()
-            analyses.configs  = configs_analyses
-            analyses.missions = missions_analyses 
-            
-            # FINALIZE SIMULATION 
-            configs.finalize()
-            analyses.finalize()     
-            
-            # APPEND MISSION TO SIMULATION 
-            mission           = analyses.missions.base
-            
-            # RUN SIMULATION !!
-            noise_results     = mission.evaluate()   
-            
-            # SAVE RESULTS
-            filename          = 'Stopped_Rotor_V2_Full_Mission_Noise_Q' + str(Q_idx)+ '_Nx' + str(N_gm_x) + '_Ny' + str(N_gm_y)
-            save_results(noise_results,filename)  
-            
-            # stop simulation clock
-            Q_idx += 1   
+    # SET UP MISSION PROFILE 
+    base_mission      = Stopped_Rotor_V2_Missions.full_mission_setup_low_altitude_constant_elevation_cruise(configs_analyses,vehicle,simulated_days,flights_per_day,
+                                            aircraft_range,reserve_segment,control_points,recharge_battery,true_course,
+                                            starting_altitude,ending_altitude)
+    missions_analyses = Stopped_Rotor_V2_Missions.missions_setup(base_mission) 
+    
+    # DEFINE ANALYSES 
+    analyses          = SUAVE.Analyses.Analysis.Container()
+    analyses.configs  = configs_analyses
+    analyses.missions = missions_analyses 
+    
+    # FINALIZE SIMULATION 
+    configs.finalize()
+    analyses.finalize()     
+    
+    # APPEND MISSION TO SIMULATION 
+    mission           = analyses.missions.base
+    
+    # RUN SIMULATION !!
+    noise_results     = mission.evaluate()   
+    
+    # SAVE RESULTS
+    filename          = 'Stopped_Rotor_V2_Full_Mission_Noise_Nx' + str(N_lat) + '_Ny' + str(N_long)
+    save_results(noise_results,filename)   
       
     if plot_mission: 
-        Stopped_Rotor_V2_Plots.plot_results(noise_results,run_noise_model)       
+        Stopped_Rotor_V2_Plots.plot_results(noise_results,run_noise_model,save_figure_flag = False )       
                 
     tf = time.time() 
     print ('time taken: '+ str(round(((tf-ti)/60),3)) + ' mins')     

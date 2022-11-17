@@ -65,6 +65,7 @@ UQ_Aircraft_Design/uncertainpy
 *.h5 
 *.fig
 *.IGS 
+*.pptx
 
 # Geometry
 *.geo

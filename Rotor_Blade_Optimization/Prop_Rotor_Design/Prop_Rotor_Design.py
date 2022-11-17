@@ -9,12 +9,9 @@ from SUAVE.Plots.Geometry.plot_vehicle                                 import pl
 from SUAVE.Components.Energy.Converters                                import Lift_Rotor, Rotor, Prop_Rotor, Propeller
 from Rotor_Plotting_Functions.Rotor_Plots import * 
 
-# Package Imports 
-import matplotlib.cm as cm 
+# Package Imports  
 import numpy as np 
-import matplotlib.pyplot as plt
-import matplotlib.ticker as ticker 
-from matplotlib.cm import ScalarMappable
+import matplotlib.pyplot as plt 
 import os
 import pickle
 
@@ -28,19 +25,18 @@ def main():
     prop_rotor                                    = SUAVE.Components.Energy.Converters.Prop_Rotor() 
     prop_rotor.tag                                = 'prop_rotor'     
     prop_rotor.tip_radius                         = 3/2
-    prop_rotor.hub_radius                         = 0.2 * prop_rotor.tip_radius
+    prop_rotor.hub_radius                         = 0.15 * prop_rotor.tip_radius
     prop_rotor.number_of_blades                   = 3  
     
     # HOVER 
     prop_rotor.design_altitude_hover              = 20 * Units.feet                  
-    prop_rotor.design_thrust_hover                = 21356/(6-1) # weight of joby-like aircrft/(number of rotors - 1) 
-    prop_rotor.freestream_velocity_hover          = np.sqrt(prop_rotor.design_thrust_hover/(2*1.2*np.pi*(prop_rotor.tip_radius**2))) # 
+    prop_rotor.design_thrust_hover                = (2362.44*9.81)/(6) # weight of joby-like aircrft
+    prop_rotor.freestream_velocity_hover          = np.sqrt(prop_rotor.design_thrust_hover/(2*1.2*np.pi*(prop_rotor.tip_radius**2)))  
  
     # CRUISE                   
     prop_rotor.design_altitude_cruise             = 2500 * Units.feet                      
-    prop_rotor.design_thrust_cruise               = 1400 
+    prop_rotor.design_thrust_cruise               = 4000/6
     prop_rotor.freestream_velocity_cruise         = 175*Units.mph 
-
 
     airfoil                                       = SUAVE.Components.Airfoils.Airfoil()    
     airfoil.coordinate_file                       =  '../../Aircraft_Models/Airfoils/NACA_4412.txt'
@@ -50,7 +46,7 @@ def main():
                                                       '../../Aircraft_Models/Airfoils/Polars/NACA_4412_polar_Re_500000.txt',
                                                       '../../Aircraft_Models/Airfoils/Polars/NACA_4412_polar_Re_1000000.txt'] 
     prop_rotor.append_airfoil(airfoil)   
-    prop_rotor.airfoil_polar_stations                  = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]   
+    prop_rotor.airfoil_polar_stations             = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]   
     
     #'''prop rotor design using Adkins and Liebeck Method'''  
     #plot_rotor_geomery_and_performance = True 
@@ -58,11 +54,11 @@ def main():
     #prop_rotor_Adkins_Leibeck(prop_rotor,plot_rotor_geomery_and_performance,save_figures) 
     
     '''prop rotor design using new method '''
-    alpha_weights                      = np.array([1.0]) 
-    beta_weights                       = np.array([0.1]) 
+    alpha_weights                      = np.linspace(0.0,1.,21) 
+    beta_weights                       = np.linspace(0.0,0.25,6) #[0,0.25,0.5,0.75,1]
     use_pyoptsparse                    = False 
-    plot_rotor_geomery_and_performance = True 
-    save_figures                       = True
+    plot_rotor_geomery_and_performance = False 
+    save_figures                       = False 
     design_prop_rotors(prop_rotor,alpha_weights,beta_weights,use_pyoptsparse, plot_rotor_geomery_and_performance,save_figures)  
    
     #'''plot prop rotor pareto fronteir '''  
@@ -160,7 +156,7 @@ def prop_rotor_Adkins_Leibeck(prop_rotor,plot_rotor_geomery_and_performance,save
     ctrl_pts       = 1 
     
     # Run Conditions       
-    theta  = np.array([135])*Units.degrees + 1E-4
+    theta  = np.array([135])*Units.degrees 
     S      = np.maximum(alt , 20*Units.feet) 
     
     # microphone locations

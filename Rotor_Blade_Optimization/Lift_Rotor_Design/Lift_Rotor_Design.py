@@ -9,7 +9,7 @@ from SUAVE.Components.Energy.Converters                                import Li
 
 import sys 
 sys.path.append('../Rotor_Plotting_Functions')
-from Rotor_Plotting_Functions.Rotor_Plots                              import * 
+from Rotor_Plots                              import * 
 
 # Package Imports 
 import matplotlib.cm as cm 
@@ -179,7 +179,7 @@ def lift_rotor_Adkins_Leibeck(rotor,plot_rotor_geomery_and_performance,save_figu
 #   Save Blade Geometry
 # ------------------------------------------------------------------   
 def save_blade_geometry(rotor,filename):
-    pickle_file  = 'Rotor_Designs/' + filename + '.pkl'
+    pickle_file  =  filename + '.pkl'
     with open(pickle_file, 'wb') as file:
         pickle.dump(rotor, file) 
     return     

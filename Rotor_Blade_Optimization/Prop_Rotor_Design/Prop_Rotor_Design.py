@@ -10,7 +10,7 @@ from SUAVE.Components.Energy.Converters                                import Li
 
 import sys 
 sys.path.append('../Rotor_Plotting_Functions')
-from Rotor_Plotting_Functions.Rotor_Plots import * 
+from Rotor_Plots import * 
 
 # Package Imports  
 import numpy as np 
@@ -453,7 +453,7 @@ def define_plot_parameters():
 #   Save Blade Geometry
 # ------------------------------------------------------------------   
 def save_blade_geometry(rotor,filename):
-    pickle_file  = 'Rotor_Designs/' + filename + '.pkl'
+    pickle_file  =  filename + '.pkl'
     with open(pickle_file, 'wb') as file:
         pickle.dump(rotor, file) 
     return      

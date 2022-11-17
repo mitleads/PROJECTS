@@ -7,6 +7,9 @@ from SUAVE.Analyses.Mission.Segments.Conditions.Aerodynamics           import Ae
 from SUAVE.Components.Energy.Networks.Battery_Propeller                import Battery_Propeller 
 from SUAVE.Plots.Geometry.plot_vehicle                                 import plot_propeller_geometry 
 from SUAVE.Components.Energy.Converters                                import Lift_Rotor, Rotor, Prop_Rotor, Propeller
+
+import sys 
+sys.path.append('../Rotor_Plotting_Functions')
 from Rotor_Plotting_Functions.Rotor_Plots import * 
 
 # Package Imports  

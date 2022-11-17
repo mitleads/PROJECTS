@@ -5,7 +5,10 @@ from SUAVE.Analyses.Mission.Segments.Segment                           import Se
 from SUAVE.Methods.Noise.Fidelity_One.Propeller.propeller_mid_fidelity import propeller_mid_fidelity
 from SUAVE.Analyses.Mission.Segments.Conditions.Aerodynamics           import Aerodynamics 
 from SUAVE.Components.Energy.Networks.Battery_Propeller                import Battery_Propeller 
-from SUAVE.Components.Energy.Converters                                import Lift_Rotor 
+from SUAVE.Components.Energy.Converters                                import Lift_Rotor
+
+import sys 
+sys.path.append('../Rotor_Plotting_Functions')
 from Rotor_Plotting_Functions.Rotor_Plots                              import * 
 
 # Package Imports 

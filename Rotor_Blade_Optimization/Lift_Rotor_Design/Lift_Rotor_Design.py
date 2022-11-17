@@ -55,7 +55,7 @@ def main():
     
     '''lift rotor design using new method '''
     alpha_weights                      = np.linspace(0.0,0.25,101)  
-    plot_rotor_geomery_and_performance = True  
+    plot_rotor_geomery_and_performance = False   
     use_pyoptsparse                    = False 
     save_figures                       = False  
     design_lift_rotors(rotor,alpha_weights,use_pyoptsparse,plot_rotor_geomery_and_performance,save_figures)

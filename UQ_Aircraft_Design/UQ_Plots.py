@@ -17,7 +17,7 @@ def plot_uq_results(UQ_RESULTS):
                   'axes.titlesize': 20}
     plt.rcParams.update(parameters)    
     plot_parameters                  = Data()  
-    plot_parameters.linestyles       = ['-','--','-.',':']
+    plot_parameters.linestyles       = '-'
     plot_parameters.markers          = ['o','v','s','P','p','^','D','X','*']
     plot_parameters.colors           = ['black','red','mediumblue','darkgreen', 'darkorange' ]   
     plot_parameters.marker_size      = 10 
@@ -65,7 +65,7 @@ def plot_mean_variance_1d(uq_res,feature,plot_parameters):
     fig.set_size_inches(plot_parameters.fig_width,plot_parameters.fig_height)   
     ax       = fig.add_subplot(1,1,1)
     ax.plot(time, uq_res.data[feature].mean,color = plot_parameters.colors[0],
-                  linestyle = plot_parameters.linestyles[0],  linewidth=plot_parameters.linewidth)
+                  linestyle = plot_parameters.linestyles,  linewidth=plot_parameters.linewidth)
     ax.tick_params(axis="y", color=plot_parameters.colors[0], labelcolor=plot_parameters.colors[0])
     ax.spines["left"].set_edgecolor(plot_parameters.colors[0])
     ax.set_ylabel(r"$\mu$", color=plot_parameters.colors[0],fontsize=plot_parameters.labelsize)
@@ -77,7 +77,7 @@ def plot_mean_variance_1d(uq_res,feature,plot_parameters):
                     color=plot_parameters.colors[1], labelcolor=plot_parameters.colors[1], labelsize=plot_parameters.labelsize)
     ax2.set_ylabel(r"$\sigma^2$" ,color=plot_parameters.colors[1], fontsize=plot_parameters.labelsize) 
     ax2.plot(time, uq_res.data[feature].variance,
-             color=plot_parameters.colors[1], linestyle = plot_parameters.linestyles[1],
+             color=plot_parameters.colors[1], linestyle = plot_parameters.linestyles,
              linewidth=plot_parameters.linewidth, antialiased=True) 
     ax2.yaxis.offsetText.set_fontsize(plot_parameters.fontsize)
     ax2.yaxis.offsetText.set_color(plot_parameters.colors[1]) 
@@ -145,7 +145,7 @@ def plot_sensitivity_1d_grid(uq_res,feature,sensitivity,plot_parameters):
             indice_label = r"$" + parameter_names[i].split("_")[0] + '{' + parameter_names[i].split("_")[1] + '}' + "$"
         except:
             indice_label = r"$" + parameter_names[i] + "$"
-        axes.plot(time, uq_res.data[feature][sensitivity][i],color=plot_parameters.colors[i], linestyle = plot_parameters.linestyles[i], linewidth=plot_parameters.linewidth, label = indice_label) 
+        axes.plot(time, uq_res.data[feature][sensitivity][i],color=plot_parameters.colors[i],marker = plot_parameters.markers[i], linestyle = plot_parameters.linestyles, linewidth=plot_parameters.linewidth, label = indice_label) 
     plt.legend(loc="best", prop={'size':  plot_parameters.legend_font_size})  
     plt.tight_layout()  
     return 

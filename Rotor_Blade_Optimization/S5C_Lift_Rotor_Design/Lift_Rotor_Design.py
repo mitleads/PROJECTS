@@ -82,18 +82,17 @@ def main():
     
     
     '''lift rotor design using new method '''
-    alpha_weights                      = np.linspace(0,0.25,21) 
-    include_OEI_constraint             = True 
-    design_lift_rotor_new_parameterization(rotor,alpha_weights,include_OEI_constraint) 
+    alpha_weights                      = np.linspace(0,0.2,5)  
+    design_lift_rotor_new_parameterization(rotor,alpha_weights) 
     
     #'''lift rotor design using baseline '''
     #alpha_weights                     = np.linspace(0,1,5) 
     #save_figure                       = True  
     #design_lift_rotor_traditional_discretization(rotor,alpha_weights,save_figure) 
 
-    # ----------------------
-    #  PLOTS 
-    # ----------------------  
+    ## ----------------------
+    ##  PLOTS 
+    ## ----------------------  
     #save_figures                       = False       
     #folder_name                        = 'S5C_Lift_Rotor_Design'
     #plot_rotor_blade_comparisons(rotor,folder_name,alpha_weights =alpha_weights,beta_weights = None,gamma_weights = None,add_plot_legends = False , save_figures = save_figures)    
@@ -103,21 +102,17 @@ def main():
 # ------------------------------------------------------------------ 
 # Lift Rotor Singe Point Design Point Analysis
 # ------------------------------------------------------------------ 
-def design_lift_rotor_new_parameterization(rotor,alpha_weights,include_OEI_constraint): 
+def design_lift_rotor_new_parameterization(rotor,alpha_weights): 
 
     rotor.hover.design_power  = None            
     for i in range(len(alpha_weights)):  
     
         rotor.optimization_parameters.multiobjective_aeroacoustic_weight = alpha_weights[i]            
-        rotor  = lift_rotor_design(rotor,include_OEI_constraint,print_iterations = True) 
-        if include_OEI_constraint:
-            OEI_tag = '_OEI'
-        else:
-            OEI_tag = '_no_OEI'
+        rotor  = lift_rotor_design(rotor,print_iterations = True)  
         # save rotor geomtry
         opt_weight = str(format(alpha_weights[i],'.5f'))
         opt_weight = opt_weight.replace('.','_')    
-        name       = 'LR_Alpha_' + opt_weight + OEI_tag
+        name       = 'LR_Alpha_' + opt_weight 
         save_blade_geometry(rotor,name)
          
         # reset power to none 
@@ -140,7 +135,7 @@ def design_lift_rotor_traditional_discretization(rotor,alpha_weights,save_figure
         # save rotor geomtry
         opt_weight = str(format(rotor.optimization_parameters.aeroacoustic_weight,'.5f'))
         opt_weight = opt_weight.replace('.','_')    
-        name       = 'Rotor_T_' + str(int(rotor.design_thrust))  + '_Alpha_' + opt_weight + '_TD'
+        name       = 'LR_' + str(int(rotor.design_thrust))  + '_Alpha_' + opt_weight + '_TD'
         save_blade_geometry(rotor,name)  
          
         plot_3d_rotor_geometry(rotor,name,save_figure)

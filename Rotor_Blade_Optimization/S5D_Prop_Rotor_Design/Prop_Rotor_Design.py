@@ -120,7 +120,7 @@ def design_prop_rotor_new_parameterization(prop_rotor,alpha_weights,beta_weights
                 OEI_tag = '_OEI'
             else:
                 OEI_tag = '_no_OEI'            
-            name       = 'Rotor_TH_Alpha_' + alpha_opt_weight + '_Beta_' + beta_opt_weight + OEI_tag  
+            name       = 'PR_Alpha_' + alpha_opt_weight + '_Beta_' + beta_opt_weight + OEI_tag  
             save_blade_geometry(prop_rotor,name) 
         
             # reset power to none 

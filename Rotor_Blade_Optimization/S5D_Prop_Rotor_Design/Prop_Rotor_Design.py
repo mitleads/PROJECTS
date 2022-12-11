@@ -73,10 +73,9 @@ def main():
     prop_rotor.airfoil_polar_stations             = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]   
      
     '''prop rotor design using new method '''
-    alpha_weights                      = np.linspace(0.0,1.,21) 
-    beta_weights                       = np.array([0.0])  # 0.0, 0.25, 0.5 ,0.75 , 1.0
-    include_OEI_constraint             = True 
-    design_prop_rotor_new_parameterization(prop_rotor,alpha_weights,beta_weights,include_OEI_constraint)  
+    alpha_weights                      = np.array([1.0,1.0])
+    beta_weights                       = np.array([0.1,0.9])    
+    design_prop_rotor_new_parameterization(prop_rotor,alpha_weights,beta_weights)  
   
     ### ----------------------
     ###  PLOTS 
@@ -93,7 +92,7 @@ def main():
 # ------------------------------------------------------------------ 
 # Tiltwing Prop-Rotor Design Point Analysis
 # ------------------------------------------------------------------ 
-def design_prop_rotor_new_parameterization(prop_rotor,alpha_weights,beta_weights,include_OEI_constraint):  
+def design_prop_rotor_new_parameterization(prop_rotor,alpha_weights,beta_weights):  
     
     for i in range(len(alpha_weights)):
         for j in range(len(beta_weights)):
@@ -109,18 +108,14 @@ def design_prop_rotor_new_parameterization(prop_rotor,alpha_weights,beta_weights
             opt_params.multiobjective_acoustic_weight     = 1 # Do not consider cruise noise 
                   
             # DESING ROTOR       
-            prop_rotor                                    = prop_rotor_design(prop_rotor,include_OEI_constraint,print_iterations = True)  
+            prop_rotor                                    = prop_rotor_design(prop_rotor,print_iterations = True)  
             
             # save rotor geomtry
             alpha_opt_weight = str(format(alpha_weights[i],'.5f'))
             alpha_opt_weight = alpha_opt_weight.replace('.','_')    
             beta_opt_weight  = str(format(beta_weights[j],'.5f'))
-            beta_opt_weight  = beta_opt_weight.replace('.','_')  
-            if include_OEI_constraint:
-                OEI_tag = '_OEI'
-            else:
-                OEI_tag = '_no_OEI'            
-            name       = 'PR_Alpha_' + alpha_opt_weight + '_Beta_' + beta_opt_weight + OEI_tag  
+            beta_opt_weight  = beta_opt_weight.replace('.','_')   
+            name       = 'PR_Alpha_' + alpha_opt_weight + '_Beta_' + beta_opt_weight  
             save_blade_geometry(prop_rotor,name) 
         
             # reset power to none 

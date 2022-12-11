@@ -82,7 +82,7 @@ def main():
     
     
     '''lift rotor design using new method '''
-    alpha_weights                      = np.linspace(0,0.2,5)  
+    alpha_weights                      = np.linspace(0,0.2,11)  
     design_lift_rotor_new_parameterization(rotor,alpha_weights) 
     
     #'''lift rotor design using baseline '''
@@ -93,9 +93,9 @@ def main():
     ## ----------------------
     ##  PLOTS 
     ## ----------------------  
-    #save_figures                       = False       
-    #folder_name                        = 'S5C_Lift_Rotor_Design'
-    #plot_rotor_blade_comparisons(rotor,folder_name,alpha_weights =alpha_weights,beta_weights = None,gamma_weights = None,add_plot_legends = False , save_figures = save_figures)    
+    save_figures                       = False       
+    folder_name                        = 'S5C_Lift_Rotor_Design'
+    plot_rotor_blade_comparisons(rotor,folder_name,alpha_weights =alpha_weights,beta_weights = None,gamma_weights = None,add_plot_legends = False , save_figures = save_figures)    
            
     return 
 

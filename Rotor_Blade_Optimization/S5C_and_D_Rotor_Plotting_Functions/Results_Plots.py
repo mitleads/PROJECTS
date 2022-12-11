@@ -164,15 +164,10 @@ def set_up_axes(PP,rotor_tag):
 # ------------------------------------------------------------------ 
 # Plot lift rotor pareto fronteir 
 # ------------------------------------------------------------------ 
-def plot_rotor_blade_comparisons(rotor,include_OEI_constraint,folder_name,alpha_weights = None,beta_weights = None,gamma_weights = None,add_plot_legends = False , save_figures = True):     
+def plot_rotor_blade_comparisons(rotor,folder_name,alpha_weights = None,beta_weights = None,gamma_weights = None,add_plot_legends = False , save_figures = True):     
     PP              = define_plot_parameters() 
      
     PP.colors_1     = cm.viridis(np.linspace(0,1,len(alpha_weights)))    
-
-    if include_OEI_constraint:
-        OEI_tag = '_OEI'
-    else:
-        OEI_tag = '_no_OEI'
         
     if type(rotor) == Prop_Rotor: 
         AXES , FIGURES  = set_up_axes(PP,'PR') 
@@ -193,7 +188,7 @@ def plot_rotor_blade_comparisons(rotor,include_OEI_constraint,folder_name,alpha_
                 alpha_opt_weight = alpha_opt_weight.replace('.','_')    
                 beta_opt_weight  = str(format(beta_weights[j],'.5f'))
                 beta_opt_weight  = beta_opt_weight.replace('.','_')    
-                rotor_file_name  = 'PR_Alpha_' + alpha_opt_weight + '_Beta_' + beta_opt_weight   + OEI_tag
+                rotor_file_name  = 'PR_Alpha_' + alpha_opt_weight + '_Beta_' + beta_opt_weight   
                 rotor_label      = r'$\alpha$ = ' + str(alpha_weights[i])  + r' $\beta$ = ' + str(beta_weights[j])   
   
                 rotor       = load_blade_geometry(folder_name,rotor_file_name)
@@ -229,7 +224,7 @@ def plot_rotor_blade_comparisons(rotor,include_OEI_constraint,folder_name,alpha_
             # save rotor geomtry
             alpha_opt_weight = str(format(alpha_weights[i],'.5f'))
             alpha_opt_weight = alpha_opt_weight.replace('.','_')     
-            rotor_file_name  =  'LR_Alpha_' + alpha_opt_weight  + OEI_tag 
+            rotor_file_name  =  'LR_Alpha_' + alpha_opt_weight  
             rotor_label      = r'$\alpha$ = ' + str(alpha_weights[i])  
             #try: 
             rotor       = load_blade_geometry(folder_name,rotor_file_name)
